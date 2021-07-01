@@ -1,5 +1,7 @@
 # Automatic Diploma Processor 2
 
+[![GitHub Actions CI](https://github.com/yurii-litvinov/ADP2/actions/workflows/ci.yml/badge.svg)](https://github.com/yurii-litvinov/ADP2/actions/workflows/ci.yml)
+
 A tool for processing various kinds of quailification works for Software Engineering chair of St. Petersburg State University. 
 It collects available information from google sheets and files with reports and reviews, then prepares data for uploading to 
 [SE chair site](https://se.math.spbu.ru/theses.html). Advanced version of
