@@ -11,3 +11,5 @@ module Workflow =
         Processor.mergeWorks knowledgeBase metadata
 
         Serializer.serialize knowledgeBase
+
+        knowledgeBase

@@ -36,6 +36,18 @@ type KnowledgeBase() =
     member _.UnknownFiles =
         unknownFiles |> List.toSeq
 
+    /// Returns a collection of works for that no files were found, for error reporting.
+    member _.WorksWithNoFiles =
+        worksWithNoFiles |> List.toSeq
+
+    /// Returns a collection of works for that no metainformation was found, for error reporting.
+    member _.WorksWithNoMetainformation =
+        works |> Seq.filter (fun w -> w.Value.Title = "") |> Seq.map (fun w -> w.Value)
+
+    /// Returns true if there are some problems with knowledge base.
+    member this.HasErrors =
+        not (Seq.isEmpty this.UnknownFiles && Seq.isEmpty this.WorksWithNoFiles && Seq.isEmpty this.WorksWithNoMetainformation)
+
     /// Returns all existing Works records.
     member _.AllWorks = (works |> Map.toSeq |> Seq.map snd) |> Seq.sortBy (fun w -> w.AuthorName)
 

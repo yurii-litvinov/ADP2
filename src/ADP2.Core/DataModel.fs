@@ -35,13 +35,16 @@ type Document = {
 type Work(shortName: string) =
     
     /// Transliterated student surname or surname and name, used as an Id of a work throughout the system.
-    member _.ShortName = shortName
+    member val ShortName = shortName with get, set
     
     /// Title of the work.
     member val Title = "" with get, set
 
     /// Full name of the author (<Surname> <First name> <Middle name>).
     member val AuthorName = "" with get, set
+
+    /// Name of the scientific advisor. Used to work with ambuguous advisors.
+    member val AdvisorName = "" with get, set
 
     /// Surname of the scientific advisor.
     member val AdvisorSurname = "" with get, set
@@ -82,6 +85,8 @@ type Work(shortName: string) =
             this.AuthorName <- other.AuthorName
         if other.AdvisorSurname <> "" && this.AdvisorSurname = "" then
             this.AdvisorSurname <- other.AdvisorSurname
+        if other.AdvisorName <> "" && this.AdvisorName = "" then
+            this.AdvisorName <- other.AdvisorName
         if other.ConsultantReview.IsSome && this.ConsultantReview.IsNone then
             this.ConsultantReview <- other.ConsultantReview
         if other.AdvisorReview.IsSome && this.AdvisorReview.IsNone then
@@ -92,3 +97,6 @@ type Work(shortName: string) =
             this.Slides <- other.Slides
         if other.Text.IsSome && this.Text.IsNone then
             this.Text <- other.Text
+
+    override this.ToString() =
+        $"{this.ShortName}"

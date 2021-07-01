@@ -9,7 +9,7 @@ def add_document(files, work, document_name):
 
 url = "https://se.math.spbu.ru/post_theses"
 
-file_name = sys.argv[1]
+file_name = '_out.json'
 
 with io.open(file_name, encoding='utf-8') as json_file:
     data = json.load(json_file)

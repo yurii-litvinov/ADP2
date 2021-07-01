@@ -23,7 +23,7 @@ type SecondCourseMetadataSourceTest() =
             firstStudent.ShortName |> should equal "Barutkin"
             firstStudent.Title |> should equal "Реализация проекции на основе модели в теории битовых векторов"
         else
-            Assert.Ignore("No redentials for Google Sheets found.")
+            Assert.Ignore("No credentials for Google Sheets found.")
 
     [<Test>]
     member _.MetadataShouldContainPloskin () =
@@ -32,4 +32,23 @@ type SecondCourseMetadataSourceTest() =
             let works = dataSource.GetWorksMetadata()
             works |> Seq.tryFind (fun w -> w.ShortName = "Ploskin") |> should be (ofCase <@Some@>)
         else
-            Assert.Ignore("No redentials for Google Sheets found.")
+            Assert.Ignore("No credentials for Google Sheets found.")
+
+    [<Test>]
+    member _.MetadataShouldContainBabich () =
+        if File.Exists config.CredentialsFile then
+            let dataSource = SecondCourseMetadataSource(config) :> IWorkMetadataSource
+            let works = dataSource.GetWorksMetadata()
+            works |> Seq.tryFind (fun w -> w.ShortName = "Babich") |> should be (ofCase <@Some@>)
+        else
+            Assert.Ignore("No credentials for Google Sheets found.")
+
+    [<Test>]
+    member _.MetadataShouldContainBothPorsevs () =
+        if File.Exists config.CredentialsFile then
+            let dataSource = SecondCourseMetadataSource(config) :> IWorkMetadataSource
+            let works = dataSource.GetWorksMetadata()
+            works |> Seq.tryFind (fun w -> w.ShortName = "Porsev.Egor") |> should be (ofCase <@Some@>)
+            works |> Seq.tryFind (fun w -> w.ShortName = "Porsev.Denis") |> should be (ofCase <@Some@>)
+        else
+            Assert.Ignore("No credentials for Google Sheets found.")

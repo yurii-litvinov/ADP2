@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>true</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ProcessorTest.fs" />
     <Compile Include="InventorizerTest.fs" />
     <Compile Include="SecondCourseMetadataSourceTest.fs" />
   </ItemGroup>

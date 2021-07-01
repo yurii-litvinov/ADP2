@@ -6,7 +6,7 @@ open System.IO
 /// Serializes knowledge base into JSON file.
 module Serializer =
     /// Metainformation about work.
-    type private ThesisInfo =
+    type ThesisInfo =
         { type_id: int
           course_id: int 
           name_ru: string 
@@ -16,7 +16,7 @@ module Serializer =
           secret_key: string }
 
     /// Information about work, including related files.
-    type private WorkInfo =
+    type WorkInfo =
         { thesis_text: string option
           reviewer_review: string option
           presentation: string option
@@ -25,17 +25,18 @@ module Serializer =
         }
 
     /// Type of qualification work as accepted by SE Chair site API.
-    type private WorkType =
+    type WorkType =
     | Practice = 2
     | BachelorsDiploma = 3
     | MastersDiploma = 4
 
     /// Configuration file format.
-    type private Config = 
+    type Config = 
         { [<JsonField(EnumValue = EnumMode.Value)>]
           WorkType: WorkType 
           Course: int
-          Year: int }
+          Year: int 
+          SecretKey: string }
 
     let private config = Json.deserialize<Config>(File.ReadAllText "_config.json")
 
@@ -56,7 +57,7 @@ module Serializer =
               author = work.AuthorName
               supervisor = work.AdvisorSurname
               publish_year = config.Year 
-              secret_key = "" } }
+              secret_key = config.SecretKey } }
 
     /// Serializes knowledge base into _out.json in a format understood by SE Chair site API.
     let serialize (knowledgeBase: KnowledgeBase) = 
