@@ -7,7 +7,8 @@ type ApplicationConfig =
     { CredentialsFile: string }
 
 type Config = 
-    { GoogleSheetId: string }
+    { Course: int
+      GoogleSheetId: string }
 
 [<EntryPoint>]
 let main _ =
@@ -29,7 +30,11 @@ let main _ =
               CredentialsFile = appConfig.CredentialsFile
               SpreadsheetId = config.GoogleSheetId }
 
-        let metadataSource = SecondCourseMetadataSource(metadataConfig)
+        let metadataSource = 
+            match config.Course with
+            | 2 -> SecondCourseMetadataSource(metadataConfig) :> IWorkMetadataSource
+            | 3 -> ThirdCourseMetadataSource(metadataConfig) :> IWorkMetadataSource
+            | _ -> failwith $"Course {config.Course} is not supported"
 
         let knowledgeBase = ADP2.Core.Workflow.generateWorksInfo metadataSource
 

@@ -11,6 +11,7 @@
     <Compile Include="ProcessorTest.fs" />
     <Compile Include="InventorizerTest.fs" />
     <Compile Include="SecondCourseMetadataSourceTest.fs" />
+    <Compile Include="ThirdCourseMetadataSourceTest.fs" />
   </ItemGroup>
 
   <ItemGroup>
