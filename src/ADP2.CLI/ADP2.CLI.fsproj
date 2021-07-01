@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="application-config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ADP2.Core\ADP2.Core.fsproj" />
+  </ItemGroup>
+
+  <Target Name="CopyFiles" AfterTargets="Publish">
+    <Copy SourceFiles="@(Content)" DestinationFolder="release" />
+    <Copy SourceFiles="../../_upload.py" DestinationFolder="release" />
+  </Target>
+
+</Project>

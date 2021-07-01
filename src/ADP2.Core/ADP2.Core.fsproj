@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Data/advisors.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="DataModel.fs" />
+    <Compile Include="KnowledgeBase.fs" />
+    <Compile Include="IWorkMetadataSource.fs" />
+    <Compile Include="SecondCourseMetadataSource.fs" />
+    <Compile Include="DocumentNameParser.fs" />
+    <Compile Include="Inventorizer.fs" />
+    <Compile Include="Processor.fs" />
+    <Compile Include="Serializer.fs" />
+    <Compile Include="Workflow.fs" />
+  </ItemGroup>
+
+  <ItemGroup />
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Json" Version="0.4.0" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.52.0.2338" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DocUtils">
+      <HintPath>..\..\..\DocUtils\DocUtils\bin\Debug\netstandard2.0\DocUtils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
