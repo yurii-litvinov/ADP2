@@ -34,6 +34,7 @@ let main _ =
             match config.Course with
             | 2 -> SecondCourseMetadataSource(metadataConfig) :> IWorkMetadataSource
             | 3 -> ThirdCourseMetadataSource(metadataConfig) :> IWorkMetadataSource
+            | 4 -> FourthCourseMetadataSource(metadataConfig) :> IWorkMetadataSource
             | _ -> failwith $"Course {config.Course} is not supported"
 
         let knowledgeBase = ADP2.Core.Workflow.generateWorksInfo metadataSource

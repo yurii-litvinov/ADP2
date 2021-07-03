@@ -9,9 +9,11 @@ type GoogleSheetsMetadataSourceConfig =
 /// A set of useful functions to work with works metadata.
 module MetadataSourceUtils =
 
+    /// Gets surname from full name in "Surname Name MiddleName" format.
     let getSurname (name: string) =
         name.Split([|' '|]) |> Seq.head
 
+    /// Uses standard transliteration rules to transliterate given string.
     let transliterate (name: string) =
         let transliterationList = 
             [ 'а', "a"
@@ -57,6 +59,8 @@ module MetadataSourceUtils =
         |> Seq.map(fun ch -> if transliterationMap.ContainsKey ch then transliterationMap.[ch] else ch.ToString()) 
         |> Seq.reduce (+)
 
+    /// Returns advisor name and surname from full name in "Surname Name MiddleName" format or
+    /// "Dr. I.I. Surname" format.
     let parseAdvisor (raw: string) =
         let surname =
             if raw.Contains('.') then
@@ -66,12 +70,13 @@ module MetadataSourceUtils =
         let name = 
             if raw.Contains('.') then
                 raw.[0..raw.Length - surname.Length - 1]
-            else if raw = "" then
+            else if raw.Contains(' ') |> not then
                 ""
             else
                 raw.Split([|' '|]) |> Seq.skip 1 |> Seq.head
         (name, surname)
 
+    /// Searches for non-unique surnames in a Work sequence and adds first name after dot for them.
     let addNamesIfNeeded (works: Work seq) =
         let surnameCounts = works |> Seq.countBy (fun w -> w.ShortName) |> Map.ofSeq
         works 
@@ -80,6 +85,7 @@ module MetadataSourceUtils =
                 w.ShortName <- w.ShortName + "." + (transliterate <| w.AuthorName.Split(' ').[1]) 
             w)
 
+    /// Constructs new Work record.
     let createWorkMetadata author advisor title =
         let work = Work(author |> getSurname |> transliterate)
         let advisor = parseAdvisor advisor

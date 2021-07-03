@@ -15,6 +15,7 @@
     <Compile Include="IWorkMetadataSource.fs" />
     <Compile Include="SecondCourseMetadataSource.fs" />
     <Compile Include="ThirdCourseMetadataSource.fs" />
+    <Compile Include="FourthCourseMetadataSource.fs" />
     <Compile Include="DocumentNameParser.fs" />
     <Compile Include="Inventorizer.fs" />
     <Compile Include="Processor.fs" />
