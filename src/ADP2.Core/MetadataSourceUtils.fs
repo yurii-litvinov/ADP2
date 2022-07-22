@@ -1,13 +1,16 @@
 ﻿namespace ADP2.Core
 
 /// Configuration for reading data from Google Sheets.
-type GoogleSheetsMetadataSourceConfig =
-    { ApplicationName: string 
+type GlobalConfig =
+    { ApplicationName: string
       CredentialsFile: string
-      SpreadsheetId: string }
+      MetadataConfigFile: string }
 
 /// A set of useful functions to work with works metadata.
 module MetadataSourceUtils =
+
+    /// Marks in a "Зачёт" column that eant that a work was successfully defended.
+    let allowedResults = Set.ofList [ "A"; "B"; "C"; "D"; "E"; "да" ]
 
     /// Gets surname from full name in "Surname Name MiddleName" format.
     let getSurname (name: string) =
@@ -86,11 +89,16 @@ module MetadataSourceUtils =
             w)
 
     /// Constructs new Work record.
-    let createWorkMetadata author advisor title =
+    let createWorkMetadata author advisor title (sourceUrl: string) committerName =
+        let cleanup (str: string) =
+            str.Replace("\r", "").Replace("\n", " ")
+
         let work = Work(author |> getSurname |> transliterate)
         let advisor = parseAdvisor advisor
         work.AdvisorName <- fst advisor
         work.AdvisorSurname <- snd advisor
         work.AuthorName <- author
-        work.Title <- title
+        work.Title <- cleanup title
+        work.SourceUri <- if sourceUrl.StartsWith "http" then sourceUrl else ""
+        work.CommitterName <- if work.SourceUri = "" then "" else committerName
         work

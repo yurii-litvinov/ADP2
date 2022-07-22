@@ -10,45 +10,36 @@ type SecondCourseMetadataSourceTest() =
     let config = 
         { ApplicationName = "ADP2"
           CredentialsFile = "../../../../../../credentials.json" 
-          SpreadsheetId = "1b1fhGFInVDNXAb_Ok14Nl03V-DviKe-GrE2Geuwsw9o" }
+          MetadataConfigFile = "Data/secondCourseConfig.json" }
 
     [<Test>]
     member _.MetadataForTheFirstStudentShouldBeReceivedCorrectly () =
         if File.Exists config.CredentialsFile then
-            let dataSource = SecondCourseMetadataSource(config) :> IWorkMetadataSource
+            let dataSource = MetadataSource(config)
             let works = dataSource.GetWorksMetadata()
             let firstStudent = Seq.head works
-            firstStudent.AdvisorSurname |> should equal "Мордвинов"
-            firstStudent.AuthorName |> should equal "Баруткин Илья Дмитриевич"
-            firstStudent.ShortName |> should equal "Barutkin"
-            firstStudent.Title |> should equal "Реализация проекции на основе модели в теории битовых векторов"
+            firstStudent.AdvisorSurname |> should equal "Литвинов"
+            firstStudent.AuthorName |> should equal "Бакова Елена Зауровна"
+            firstStudent.ShortName |> should equal "Bakova"
+            firstStudent.Title |> should equal "Создание категорий уведомлений в HwProj-2"
         else
             Assert.Ignore("No credentials for Google Sheets found.")
 
     [<Test>]
-    member _.MetadataShouldContainPloskin () =
+    member _.MetadataShouldContainMoskalenko() =
         if File.Exists config.CredentialsFile then
-            let dataSource = SecondCourseMetadataSource(config) :> IWorkMetadataSource
+            let dataSource = MetadataSource(config)
             let works = dataSource.GetWorksMetadata()
-            works |> Seq.tryFind (fun w -> w.ShortName = "Ploskin") |> should be (ofCase <@Some@>)
+            works |> Seq.tryFind (fun w -> w.ShortName = "Moskalenko") |> should be (ofCase <@Some@>)
         else
             Assert.Ignore("No credentials for Google Sheets found.")
 
+    // Remove this test when Filatova defends her practice.
     [<Test>]
-    member _.MetadataShouldContainBabich () =
+    member _.MetadataShouldNotContainFilatovaYet() =
         if File.Exists config.CredentialsFile then
-            let dataSource = SecondCourseMetadataSource(config) :> IWorkMetadataSource
+            let dataSource = MetadataSource(config)
             let works = dataSource.GetWorksMetadata()
-            works |> Seq.tryFind (fun w -> w.ShortName = "Babich") |> should be (ofCase <@Some@>)
-        else
-            Assert.Ignore("No credentials for Google Sheets found.")
-
-    [<Test>]
-    member _.MetadataShouldContainBothPorsevs () =
-        if File.Exists config.CredentialsFile then
-            let dataSource = SecondCourseMetadataSource(config) :> IWorkMetadataSource
-            let works = dataSource.GetWorksMetadata()
-            works |> Seq.tryFind (fun w -> w.ShortName = "Porsev.Egor") |> should be (ofCase <@Some@>)
-            works |> Seq.tryFind (fun w -> w.ShortName = "Porsev.Denis") |> should be (ofCase <@Some@>)
+            works |> Seq.tryFind (fun w -> w.ShortName = "Filatova") |> should equal None
         else
             Assert.Ignore("No credentials for Google Sheets found.")

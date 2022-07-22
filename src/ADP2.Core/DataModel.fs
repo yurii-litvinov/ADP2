@@ -43,6 +43,12 @@ type Work(shortName: string) =
     /// Full name of the author (<Surname> <First name> <Middle name>).
     member val AuthorName = "" with get, set
 
+    /// URL of a source code, if present.
+    member val SourceUri = "" with get, set
+
+    /// Commiter name for a source code, if present.
+    member val CommitterName = "" with get, set
+
     /// Name of the scientific advisor. Used to work with ambuguous advisors.
     member val AdvisorName = "" with get, set
 

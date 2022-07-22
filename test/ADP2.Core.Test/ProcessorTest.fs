@@ -10,16 +10,16 @@ type ProcessorTest() =
     let config = 
         { ApplicationName = "ADP2"
           CredentialsFile = "../../../../../../credentials.json" 
-          SpreadsheetId = "1b1fhGFInVDNXAb_Ok14Nl03V-DviKe-GrE2Geuwsw9o" }
+          MetadataConfigFile = "Data/secondCourseConfig.json" }
 
     [<Test>]
     member _.MetainformationShouldBeFilteredCorrectly () =
         if File.Exists config.CredentialsFile then
-            let dataSource = SecondCourseMetadataSource(config) :> IWorkMetadataSource
+            let dataSource = MetadataSource(config)
             let works = dataSource.GetWorksMetadata()
             let knowledgeBase = KnowledgeBase ()
             Processor.mergeWorks knowledgeBase works
             knowledgeBase.WorksWithNoMetainformation |> shouldBeEmpty
-            knowledgeBase.WorksWithNoFiles |> shouldHaveLength 15
+            knowledgeBase.WorksWithNoFiles |> shouldHaveLength 17
         else
             Assert.Ignore("No credentials for Google Sheets found.")

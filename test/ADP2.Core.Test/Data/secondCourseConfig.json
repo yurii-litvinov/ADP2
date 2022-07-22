@@ -1,0 +1,15 @@
+﻿{
+  "WorkType": 6,
+  "Programme": 1,
+  "Year": 2022,
+  "GoogleSheetId": "1OyDYJ8N_fvdphXYdY2h_O1Cr1hB6noPcfv4XXFUkEYc",
+  "SecretKey": "",
+
+  "SheetName": "СП",
+  "AuthorNameColumn": "ФИО",
+  "AdvisorColumn": "Научный руководитель",
+  "TitleColumn": "Тема",
+  "SourceUriColumn": "-",
+  "CommitterNameColumn": "-",
+  "ResultColumn": "В ведомость"
+}
