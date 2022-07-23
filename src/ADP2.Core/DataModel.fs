@@ -93,6 +93,10 @@ type Work(shortName: string) =
             this.AdvisorSurname <- other.AdvisorSurname
         if other.AdvisorName <> "" && this.AdvisorName = "" then
             this.AdvisorName <- other.AdvisorName
+        if other.SourceUri <> "" && this.SourceUri = "" then
+            this.SourceUri <- other.SourceUri
+        if other.CommitterName <> "" && this.CommitterName = "" then
+            this.CommitterName <- other.CommitterName
         if other.ConsultantReview.IsSome && this.ConsultantReview.IsNone then
             this.ConsultantReview <- other.ConsultantReview
         if other.AdvisorReview.IsSome && this.AdvisorReview.IsNone then
