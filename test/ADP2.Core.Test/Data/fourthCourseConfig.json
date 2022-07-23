@@ -1,0 +1,15 @@
+﻿{
+  "WorkType": 3,
+  "Programme": 1,
+  "Year": 2022,
+  "GoogleSheetId": "103E-S9SxzRAPiTt_Yr6428243hzIKzjy1WaLR_W7HDM",
+  "SecretKey": "",
+
+  "SheetName": "СП",
+  "AuthorNameColumn": "ФИО",
+  "AdvisorColumn": "Научный руководитель",
+  "TitleColumn": "Название ВКР",
+  "SourceUriColumn": "Ссылка на код",
+  "CommitterNameColumn": "Имя коммитера",
+  "ResultColumn": "Защита"
+}
