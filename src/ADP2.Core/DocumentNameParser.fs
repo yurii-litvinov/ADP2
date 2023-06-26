@@ -55,11 +55,14 @@ module DocumentNameParser =
                     else
                         None
 
+        let splittedName = fileName.Split("\\")
+        let fileNamePart = splittedName |> Seq.last
+
         match regexMatch with
             | Some regexMatch ->
                 let authors = regexMatch.Groups.["ShortName"].Captures |> Seq.map (fun c -> c.Value) |> Seq.toList
                 let kind = regexMatch.Groups.["Kind"].Value
-                let fileName = (System.IO.FileInfo fileName).Name
-                Choice1Of2 {FileName = fileName; Authors = authors; Kind = toDocumentKind kind}
+                let fileNamePart = (System.IO.FileInfo fileNamePart).Name
+                Choice1Of2 {FileName = fileNamePart; FileNameWithRelativePath = fileName; Authors = authors; Kind = toDocumentKind kind}
             | None -> Choice2Of2 fileName
 

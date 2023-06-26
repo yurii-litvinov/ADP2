@@ -59,7 +59,7 @@ module Serializer =
     let private docToString (d: Document option) =
         match d with 
         | None -> None
-        | Some d -> Some d.FileName
+        | Some d -> Some d.FileNameWithRelativePath
 
     let private serializeWork (work: Work) =
         { thesis_text = docToString work.Text

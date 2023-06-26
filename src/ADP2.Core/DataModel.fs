@@ -21,6 +21,7 @@ type DocumentKind =
 /// for example, "Ivanov.Ivan-slides.pdf"
 type Document = { 
     FileName: string
+    FileNameWithRelativePath: string
     Authors: string list
     Kind: DocumentKind 
 }

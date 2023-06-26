@@ -57,7 +57,7 @@ module MetadataSourceUtils =
             |> List.map 
                 (fun (a, b) -> (a.ToString().ToUpper().[0], if b = "" then b else b.ToUpper().[0].ToString() + b.[1..]))
         let transliterationMap = transliterationList @ transliterationCapsList |> Map.ofList
-        
+
         name.ToCharArray() 
         |> Seq.map(fun ch -> if transliterationMap.ContainsKey ch then transliterationMap.[ch] else ch.ToString()) 
         |> Seq.reduce (+)
