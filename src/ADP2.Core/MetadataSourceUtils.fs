@@ -9,7 +9,7 @@ type GlobalConfig =
 /// A set of useful functions to work with works metadata.
 module MetadataSourceUtils =
 
-    /// Marks in a "Зачёт" column that eant that a work was successfully defended.
+    /// Marks in a "Зачёт" column that meant that a work was successfully defended.
     let allowedResults = Set.ofList [ "A"; "B"; "C"; "D"; "E"; "да" ]
 
     /// Gets surname from full name in "Surname Name MiddleName" format.

@@ -1,0 +1,3 @@
+[submodule "DocUtils"]
+	path = DocUtils
+	url = https://github.com/yurii-litvinov/DocUtils

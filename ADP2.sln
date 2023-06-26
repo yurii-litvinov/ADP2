@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ADP2.Core", "src\ADP2.Core\ADP2.Core.fsproj", "{69AC7CBD-9A64-46C2-9C5C-8429404F92E1}"
 EndProject
@@ -9,11 +9,15 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ADP2.CLI", "src\ADP2.CLI\AD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{77E3D5FE-DDE8-4FA4-914F-813FCD058CB8}"
 	ProjectSection(SolutionItems) = preProject
-		_upload.py = _upload.py
 		README.md = README.md
+		_upload.py = _upload.py
 	EndProjectSection
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "ADP2.Core.Tests", "test\ADP2.Core.Test\ADP2.Core.Tests.fsproj", "{B06778C2-80E2-4EF5-B702-DA755380F0A9}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "DocUtils", "DocUtils\DocUtils\DocUtils.fsproj", "{ECEC9DC3-4771-41DE-A38C-0C8B99BFE2D6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalDependencies", "ExternalDependencies", "{9B9E9A59-6816-4C97-81F7-CC2359096C7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,16 @@ Global
 		{B06778C2-80E2-4EF5-B702-DA755380F0A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B06778C2-80E2-4EF5-B702-DA755380F0A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B06778C2-80E2-4EF5-B702-DA755380F0A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECEC9DC3-4771-41DE-A38C-0C8B99BFE2D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECEC9DC3-4771-41DE-A38C-0C8B99BFE2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECEC9DC3-4771-41DE-A38C-0C8B99BFE2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECEC9DC3-4771-41DE-A38C-0C8B99BFE2D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ECEC9DC3-4771-41DE-A38C-0C8B99BFE2D6} = {9B9E9A59-6816-4C97-81F7-CC2359096C7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C73C857-1C55-47FE-A912-CE1E3445DB65}

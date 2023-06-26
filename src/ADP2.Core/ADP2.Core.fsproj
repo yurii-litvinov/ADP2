@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,8 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Json" Version="0.4.0" />
-    <PackageReference Include="SEChairDocUtils" Version="0.0.2" />
+    <PackageReference Include="FSharp.Json" Version="0.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DocUtils\DocUtils\DocUtils.fsproj" />
   </ItemGroup>
 
 </Project>

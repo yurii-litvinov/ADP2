@@ -9,11 +9,10 @@ https://github.com/yurii-litvinov/adp. It supports bachelor qualification works,
 
 ## Usage
 
-* Add NuGet source with DocUtils package:
-  `dotnet nuget add source --username <user-name> --password <password> --store-password-in-clear-text --name github "https://nuget.pkg.github.com/yurii-litvinov/index.json"`
-  User name and password you can obtain from People That Know It. Password is actually an access token for GitHub NuGet repository.
-* Build this project using .NET (>= 6.0) using `dotnet publish -c Release -o release`.
-* Add `release` folder to your `PATH` variable, for example, `set PATH=C:\Users\yurii\source\repos\ADP2\release;%PATH%`.
+* Clone it with submodules `git clone --recurse-submodules https://github.com/yurii-litvinov/ADP2.git` 
+  * or init submodules after clone: `git submodule update --init`
+* Build this project using .NET (>= 7.0) using `dotnet publish -c Release`.
+* Add resulting `publish` folder to your `PATH` variable, for example, `set PATH=C:\Users\yurii\source\repos\ADP2\release;%PATH%`.
 * Collect your qualification work files in one folder, make sure that they are named as 
   `<student name>-<report|slides|review|advisor-review|reviewer-review>.pdf`
   For example, `Ololoev-advisor-review.pdf`.
@@ -36,6 +35,7 @@ https://github.com/yurii-litvinov/adp. It supports bachelor qualification works,
     * 5 - Information technologies
     * 6 - Group 344 (bachelors) (actually it is SAIS, but whatever)
     * 7 - Software engineering (masters)
+    * 8 - Programming technologies (bachelors)
   * Year: year of defence (now we publish only spring works, so it is unambiguous);
   * GoogleSheetId: hash of a Google Sheet with info about works, for example, "1b1fhGFInVDNXAb_Ok14Nl03V-DviKe-GrE2Geuwsw9o". 
     You can get it from URL of an opened sheet in Google Docs.
