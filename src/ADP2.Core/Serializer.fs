@@ -80,5 +80,12 @@ module Serializer =
     let serialize (knowledgeBase: KnowledgeBase) = 
         let works = knowledgeBase.AllWorks
         let jsonConfig = JsonConfig.create(serializeNone = SerializeNone.Omit)
-        let json = works |> Seq.map serializeWork |> Seq.toList |> (Json.serializeEx jsonConfig)
+        
+        let json = 
+            works 
+            |> Seq.filter (fun w -> not w.DoNotPublish) 
+            |> Seq.map serializeWork 
+            |> Seq.toList 
+            |> (Json.serializeEx jsonConfig)
+
         File.WriteAllText("_out.json", json)

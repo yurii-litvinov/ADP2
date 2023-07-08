@@ -5,10 +5,28 @@ open System.Text.RegularExpressions
 /// Utility that helps to process file name and classify a file according to a fixed name format traditionally used
 /// for qualification works of SE chair.
 module DocumentNameParser =
+    
+    /// Helper class that does the opposite of Maybe monad --- runs bound functions until one of them returns Some.
+    /// Totally not a monad, but useful nonetheless.
+    type private MatcherBuilder() =
+        member x.Bind(v: Match, f) = 
+            if v.Success then Some v
+            else f None
+        member x.Return (v: Match) =
+            if v.Success then Some v
+            else None
+
+    let private unmaybe = MatcherBuilder()
+
     /// Regexp for file naming scheme in this format:
     /// <transliterated surname of a student>-<document kind>.<extension>
     /// For example, "Ololoev-report.pdf"
     let private generalPattern = @"((?<ShortName>[a-z.]+)-)+(?<Kind>(slides)|(presentation)|(report)|(consultant-review)|(advisor-review)|(reviewer-review))"
+
+    /// Regexp for file naming scheme in new russian format:
+    /// <Actual russian surname of a student><.optional name>-<semester>-<document kind>.<extension>
+    /// For example, "Ололоев.Йцукен-4-семест-отчёт.pdf"
+    let private newGeneralPattern = @"((?<ShortName>[а-яё.]+)-)+(\d-семестр)-(?<Kind>(презентация)|(отчёт)|(отзыв-консультанта)|(отзыв))"
 
     /// Pattern for matching advisor and consultant reviews in one file. Separate from general pattern to avoid 
     /// regex greediness issues.
@@ -21,6 +39,9 @@ module DocumentNameParser =
     /// Regex corresponding to general pattern.
     let private generalRegex = Regex(generalPattern, RegexOptions.IgnoreCase)
 
+    /// Regex corresponding to new (russian) general pattern.
+    let private newGeneralRegex = Regex(newGeneralPattern, RegexOptions.IgnoreCase)
+
     /// Regex corresponding to high priority pattern.
     let private highPriorityRegex = Regex(highPriorityPattern, RegexOptions.IgnoreCase)
 
@@ -29,31 +50,27 @@ module DocumentNameParser =
 
     /// Classifies files to document kinds.
     let private toDocumentKind = function
-        | "report" -> Text
-        | "slides" | "presentation" -> Slides
-        | "advisor-consultant-review" -> AdvisorConsultantReview
-        | "review" | "advisor-review" -> AdvisorReview
-        | "consultant-review" -> ConsultantReview
-        | "reviewer-review" -> ReviewerReview
+        | "report" | "отчёт" -> Text
+        | "slides" | "presentation" | "презентация" | "слайды" -> Slides
+        | "advisor-consultant-review" | "отзыв-научного-руководителя-и-консультанта" -> AdvisorConsultantReview
+        | "review" | "advisor-review" | "отзыв" -> AdvisorReview
+        | "consultant-review" | "отзыв-консультанта" -> ConsultantReview
+        | "reviewer-review" | "рецензия" -> ReviewerReview
         | _ -> failwith "Incorrect document kind, regex seems to be invalid"
 
     /// Parses given file name and produces corresponding Document entry if parsing was successful.
     /// Returns file name if it failed to match.
     let parse fileName: Choice<Document, string> =
         let regexMatch =
-            let priorityMatch = highPriorityRegex.Match(fileName)
-            if priorityMatch.Success then
-                Some priorityMatch
-            else
-                let generalMatch = generalRegex.Match(fileName)
-                if generalMatch.Success then
-                    Some generalMatch
-                else
-                    let lowPriorityMatch = lowPriorityRegex.Match(fileName)
-                    if lowPriorityMatch.Success then
-                        Some lowPriorityMatch
-                    else
-                        None
+            let foundMatch =
+                unmaybe {
+                    let! _ = highPriorityRegex.Match(fileName)
+                    let! _ = generalRegex.Match(fileName)
+                    let! _ = newGeneralRegex.Match(fileName)
+                    return lowPriorityRegex.Match(fileName)
+                }
+
+            foundMatch
 
         let splittedName = fileName.Split("\\")
         let fileNamePart = splittedName |> Seq.last
@@ -65,4 +82,3 @@ module DocumentNameParser =
                 let fileNamePart = (System.IO.FileInfo fileNamePart).Name
                 Choice1Of2 {FileName = fileNamePart; FileNameWithRelativePath = fileName; Authors = authors; Kind = toDocumentKind kind}
             | None -> Choice2Of2 fileName
-

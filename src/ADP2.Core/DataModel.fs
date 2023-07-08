@@ -71,6 +71,9 @@ type Work(shortName: string) =
     /// Reviewer review, if present.
     member val ReviewerReview: Document option = None with get, set
 
+    /// If true, work was explicitly excluded from publishing and will not be included in a generated output.
+    member val DoNotPublish = false with get, set
+
     /// Adds a new document to the work entry.
     member this.Add (document: Document) =
         match document.Kind with
@@ -108,6 +111,8 @@ type Work(shortName: string) =
             this.Slides <- other.Slides
         if other.Text.IsSome && this.Text.IsNone then
             this.Text <- other.Text
+        if other.DoNotPublish then
+            this.DoNotPublish <- true
 
     override this.ToString() =
         $"{this.ShortName}"

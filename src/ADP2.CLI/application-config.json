@@ -1,3 +1,5 @@
 {
-  "CredentialsFile": "C:/repos/ADP2/credentials.json"
+  "MetadataConfigFile": "_config.json",
+  "GoogleCredentialsFile": "credentials.json",
+  "GoogleApplicationName": "ADP2"
 }

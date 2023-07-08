@@ -6,11 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="ApplicationConfig.fs" />
     <Compile Include="DataModel.fs" />
+    <Compile Include="DataModelUtils.fs" />
     <Compile Include="KnowledgeBase.fs" />
-    <Compile Include="MetadataSourceUtils.fs" />
-    <Compile Include="MetadataSource.fs" />
     <Compile Include="DocumentNameParser.fs" />
+    <Compile Include="MetadataSources\MetadataSourceUtils.fs" />
+    <Compile Include="MetadataSources\IMetadataSource.fs" />
+    <Compile Include="MetadataSources\GoogleSheetsMetadataSource.fs" />
+    <Compile Include="MetadataSources\YandexDiskMetadataSource.fs" />
+    <Compile Include="MetadataSources\MetadataSourceSelector.fs" />
     <Compile Include="Inventorizer.fs" />
     <Compile Include="Processor.fs" />
     <Compile Include="Serializer.fs" />

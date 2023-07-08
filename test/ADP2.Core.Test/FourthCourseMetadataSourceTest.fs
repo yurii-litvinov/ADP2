@@ -8,15 +8,15 @@ open System.IO
 type FourthCourseMetadataSourceTest() =
 
     let config = 
-        { ApplicationName = "ADP2"
-          CredentialsFile = "../../../../../../credentials.json" 
+        { GoogleApplicationName = "ADP2"
+          GoogleCredentialsFile = "../../../../../../credentials.json" 
           MetadataConfigFile = "Data/fourthCourseConfig.json" }
 
     [<Test>]
     member _.MetadataForTheFirstStudentShouldBeReceivedCorrectly () =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             let firstStudent = Seq.head works
             firstStudent.AdvisorSurname |> should equal "Терехов"
             firstStudent.AuthorName |> should equal "Асеева Серафима Олеговна"

@@ -8,15 +8,15 @@ open System.IO
 type SecondCourseMetadataSourceTest() =
 
     let config = 
-        { ApplicationName = "ADP2"
-          CredentialsFile = "../../../../../../credentials.json" 
+        { GoogleApplicationName = "ADP2"
+          GoogleCredentialsFile = "../../../../../../credentials.json" 
           MetadataConfigFile = "Data/secondCourseConfig.json" }
 
     [<Test>]
     member _.MetadataForTheFirstStudentShouldBeReceivedCorrectly () =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             let firstStudent = Seq.head works
             firstStudent.AdvisorSurname |> should equal "Литвинов"
             firstStudent.AuthorName |> should equal "Бакова Елена Зауровна"
@@ -27,9 +27,9 @@ type SecondCourseMetadataSourceTest() =
 
     [<Test>]
     member _.MetadataShouldContainMoskalenko() =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             works |> Seq.tryFind (fun w -> w.ShortName = "Moskalenko") |> should be (ofCase <@Some@>)
         else
             Assert.Ignore("No credentials for Google Sheets found.")
@@ -37,9 +37,9 @@ type SecondCourseMetadataSourceTest() =
     // Remove this test when Filatova defends her practice.
     [<Test>]
     member _.MetadataShouldNotContainFilatovaYet() =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             works |> Seq.tryFind (fun w -> w.ShortName = "Filatova") |> should equal None
         else
             Assert.Ignore("No credentials for Google Sheets found.")

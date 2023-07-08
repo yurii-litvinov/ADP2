@@ -8,15 +8,15 @@ open System.IO
 type ThirdCourseMetadataSourceTest() =
 
     let config = 
-        { ApplicationName = "ADP2"
-          CredentialsFile = "../../../../../../credentials.json" 
+        { GoogleApplicationName = "ADP2"
+          GoogleCredentialsFile = "../../../../../../credentials.json" 
           MetadataConfigFile = "Data/thirdCourseConfig.json" }
 
     [<Test>]
     member _.MetadataForTheFirstStudentShouldBeReceivedCorrectly () =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             let firstStudent = Seq.head works
             firstStudent.AdvisorSurname |> should equal "Смирнов"
             firstStudent.AuthorName |> should equal "Израилев Андрей Дмитриевич"
@@ -29,9 +29,9 @@ type ThirdCourseMetadataSourceTest() =
 
     [<Test>]
     member _.MetadataShouldContainBothPorsevs () =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             works |> Seq.tryFind (fun w -> w.ShortName = "Porsev.Egor") |> should be (ofCase <@Some@>)
             works |> Seq.tryFind (fun w -> w.ShortName = "Porsev.Denis") |> should be (ofCase <@Some@>)
         else
@@ -39,9 +39,9 @@ type ThirdCourseMetadataSourceTest() =
 
     [<Test>]
     member _.MetadataShouldContainSourceUriAndCommitter() =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             works |> Seq.tryFind (fun w -> w.ShortName = "Usmanov") |> should be (ofCase <@Some@>)
             let usmanov = works |> Seq.find (fun w -> w.ShortName = "Usmanov")
             usmanov.SourceUri |> should equal "https://github.com/spbu-se/WebAutomataConstructor"

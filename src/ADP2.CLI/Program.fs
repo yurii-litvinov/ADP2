@@ -3,9 +3,6 @@ open System.IO
 open FSharp.Json
 open ADP2.Core
 
-type ApplicationConfig =
-    { CredentialsFile: string }
-
 [<EntryPoint>]
 let main _ =
     if not <| File.Exists "_config.json" then
@@ -17,14 +14,7 @@ let main _ =
             Json.deserialize<ApplicationConfig>
                 (File.ReadAllText <| AppDomain.CurrentDomain.BaseDirectory + "application-config.json")
 
-        let globalConfig = 
-            { ApplicationName = "ADP2"
-              CredentialsFile = appConfig.CredentialsFile
-              MetadataConfigFile = "_config.json" }
-
-        let metadataSource = MetadataSource(globalConfig)
-
-        let knowledgeBase = ADP2.Core.Workflow.generateWorksInfo metadataSource
+        let knowledgeBase = ADP2.Core.Workflow.generateWorksInfo appConfig
 
         if knowledgeBase.HasErrors then
             printfn "Unknown files:"
@@ -37,6 +27,11 @@ let main _ =
             printfn ""
             printfn "Works with no metainformation:"
             knowledgeBase.WorksWithNoMetainformation |> Seq.iter (fun w -> printfn "%s" w.ShortName)
+
+        if not <| Seq.isEmpty knowledgeBase.WorksNotForPublishing then
+            printfn ""
+            printfn "Works explicitly marked as 'Not for publishing':"
+            knowledgeBase.WorksNotForPublishing |> Seq.iter (fun w -> printfn "%s" w.ShortName)
 
         if not <| File.Exists "_upload.py" then
             File.Copy(AppDomain.CurrentDomain.BaseDirectory + "/_upload.py", "_upload.py")

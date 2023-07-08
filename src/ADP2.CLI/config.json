@@ -1,8 +1,13 @@
 {
   "WorkType": 8,
   "Programme": 1,
-  "Year": 2022,
-  "GoogleSheetId": "1MCVf88nLnYuRdPKURYbX8dNcMLweTWUUrqOCmfcJmvI",
+  "Year": 2023,
+  "YandexSheetFolderUrlExample": "https://disk.yandex.ru/client/disk/%D0%9A%D1%83%D1%80%D1%81%D1%8B/%D0%9F%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B8%20%D0%B8%20%D0%92%D0%9A%D0%A0/%D0%A3%D1%87%D0%B5%D0%B1%D0%BD%D1%8B%D0%B5%20%D0%BF%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B8%202%20%D0%BA%D1%83%D1%80%D1%81%D0%B0",
+  "YandexSheetFolderUrl": "https://disk.yandex.ru/client/disk/%D0%9A%D1%83%D1%80%D1%81%D1%8B/%D0%9F%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B8%20%D0%B8%20%D0%92%D0%9A%D0%A0/%D0%A3%D1%87%D0%B5%D0%B1%D0%BD%D1%8B%D0%B5%20%D0%BF%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D0%B8%202%20%D0%BA%D1%83%D1%80%D1%81%D0%B0",
+  "YandexSheetFileNameExample": "Весенние учебные практики 2 курса техпрога, 2022-2023",
+  "YandexSheetFileName": "Весенние учебные практики 2 курса техпрога, 2022-2023",
+  "GoogleSheetIdExample": "1zUMT5TkjDuiwjABzu-83n972tlx0Jg1b_wwZcYFzLQs",
+  "GoogleSheetId": "",
   "SecretKey": "",
 
   "SheetName": "СП",
@@ -11,5 +16,6 @@
   "TitleColumn": "Тема",
   "SourceUriColumn": "Код",
   "CommitterNameColumn": "Имя коммитера",
-  "ResultColumn": "Зачёт"
+  "ResultColumn": "Зачёт",
+  "DoNotPublishColumn": ""
 }

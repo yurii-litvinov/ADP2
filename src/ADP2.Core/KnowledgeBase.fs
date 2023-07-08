@@ -1,5 +1,7 @@
 ﻿namespace ADP2.Core
 
+open DataModelUtils
+
 /// Repository of all information known about works.
 type KnowledgeBase() = 
     let mutable works = Map.empty
@@ -44,6 +46,10 @@ type KnowledgeBase() =
     member _.WorksWithNoMetainformation =
         works |> Seq.filter (fun w -> w.Value.Title = "") |> Seq.map (fun w -> w.Value)
 
+    /// Returns a collection of works explicitly prohibited from publishing.
+    member _.WorksNotForPublishing =
+        works |> Seq.filter (fun w -> w.Value.DoNotPublish) |> Seq.map (fun w -> w.Value)
+
     /// Returns true if there are some problems with knowledge base.
     member this.HasErrors =
         not (Seq.isEmpty this.UnknownFiles && Seq.isEmpty this.WorksWithNoFiles && Seq.isEmpty this.WorksWithNoMetainformation)
@@ -59,6 +65,9 @@ type KnowledgeBase() =
     member _.Merge (work: Work) =
         if works.ContainsKey work.ShortName then
             works.[work.ShortName].Merge work
+            true
+        elif works.ContainsKey (transliterate work.ShortName) then
+            works.[transliterate work.ShortName].Merge work
             true
         else
             false

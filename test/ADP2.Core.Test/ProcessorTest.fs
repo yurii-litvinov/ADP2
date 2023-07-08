@@ -8,15 +8,15 @@ open System.IO
 type ProcessorTest() =
 
     let config = 
-        { ApplicationName = "ADP2"
-          CredentialsFile = "../../../../../../credentials.json" 
+        { GoogleApplicationName = "ADP2"
+          GoogleCredentialsFile = "../../../../../../credentials.json" 
           MetadataConfigFile = "Data/secondCourseConfig.json" }
 
     [<Test>]
     member _.MetainformationShouldBeFilteredCorrectly () =
-        if File.Exists config.CredentialsFile then
-            let dataSource = MetadataSource(config)
-            let works = dataSource.GetWorksMetadata()
+        if File.Exists config.GoogleCredentialsFile then
+            let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
+            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
             let knowledgeBase = KnowledgeBase ()
             Processor.mergeWorks knowledgeBase works
             knowledgeBase.WorksWithNoMetainformation |> shouldBeEmpty
