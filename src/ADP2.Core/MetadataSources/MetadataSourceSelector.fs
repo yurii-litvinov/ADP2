@@ -7,17 +7,17 @@ open System.IO
 module MetadataSourceSelector =
 
     /// Part of a metadata config interesting for selector.
-    type Config = 
-        {
-            YandexSheetFolderUrl: string
-            YandexSheetFileName: string
-            GoogleSheetId: string 
-        }
+    type Config =
+        { YandexSheetFolderUrl: string
+          YandexSheetFileName: string
+          GoogleSheetId: string }
 
     /// Selects and creates metadata source according to an URL of spreadshhet with metadata.
     /// Google Sheets and Yandex.Disk sources are supported.
-    let selectMetadataSource (appConfig: ApplicationConfig): IMetadataSource =
-        let dataConfig = Json.deserialize<Config>(File.ReadAllText appConfig.MetadataConfigFile)
+    let selectMetadataSource (appConfig: ApplicationConfig) : IMetadataSource =
+        let dataConfig =
+            Json.deserialize<Config> (File.ReadAllText appConfig.MetadataConfigFile)
+
         if dataConfig.YandexSheetFolderUrl.Length > 0 then
             YandexDiskMetadataSource(appConfig)
         else

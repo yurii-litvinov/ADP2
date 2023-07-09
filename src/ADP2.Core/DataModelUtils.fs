@@ -5,7 +5,7 @@ module DataModelUtils =
 
     /// Uses standard transliteration rules to transliterate given string.
     let transliterate (name: string) =
-        let transliterationList = 
+        let transliterationList =
             [ 'а', "a"
               'б', "b"
               'в', "v"
@@ -39,12 +39,18 @@ module DataModelUtils =
               'э', "e"
               'ю', "iu"
               'я', "ia" ]
-        let transliterationCapsList = 
-            transliterationList 
-            |> List.map 
-                (fun (a, b) -> (a.ToString().ToUpper().[0], if b = "" then b else b.ToUpper().[0].ToString() + b.[1..]))
+
+        let transliterationCapsList =
+            transliterationList
+            |> List.map (fun (a, b) ->
+                (a.ToString().ToUpper().[0], (if b = "" then b else b.ToUpper().[0].ToString() + b.[1..])))
+
         let transliterationMap = transliterationList @ transliterationCapsList |> Map.ofList
 
-        name.ToCharArray() 
-        |> Seq.map(fun ch -> if transliterationMap.ContainsKey ch then transliterationMap.[ch] else ch.ToString()) 
+        name.ToCharArray()
+        |> Seq.map (fun ch ->
+            if transliterationMap.ContainsKey ch then
+                transliterationMap.[ch]
+            else
+                ch.ToString())
         |> Seq.reduce (+)

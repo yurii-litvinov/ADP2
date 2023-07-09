@@ -8,5 +8,4 @@ module Processor =
 
     /// Adds metadata to existing works in knowledge base. Reports metadata if no matching files were found.
     let mergeWorks (knowledgeBase: KnowledgeBase) (metadata: Work seq) =
-        metadata
-        |> Seq.iter (processMetadata knowledgeBase)
+        metadata |> Seq.iter (processMetadata knowledgeBase)

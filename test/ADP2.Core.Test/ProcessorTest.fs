@@ -7,17 +7,20 @@ open System.IO
 
 type ProcessorTest() =
 
-    let config = 
+    let config =
         { GoogleApplicationName = "ADP2"
-          GoogleCredentialsFile = "../../../../../../credentials.json" 
+          GoogleCredentialsFile = "../../../../../../credentials.json"
           MetadataConfigFile = "Data/secondCourseConfig.json" }
 
     [<Test>]
-    member _.MetainformationShouldBeFilteredCorrectly () =
+    member _.MetainformationShouldBeFilteredCorrectly() =
         if File.Exists config.GoogleCredentialsFile then
             let dataSource = GoogleSheetsMetadataSource(config) :> IMetadataSource
-            let works = dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
-            let knowledgeBase = KnowledgeBase ()
+
+            let works =
+                dataSource.GetWorksMetadataAsync() |> Async.AwaitTask |> Async.RunSynchronously
+
+            let knowledgeBase = KnowledgeBase()
             Processor.mergeWorks knowledgeBase works
             knowledgeBase.WorksWithNoMetainformation |> shouldBeEmpty
             knowledgeBase.WorksWithNoFiles |> shouldHaveLength 17

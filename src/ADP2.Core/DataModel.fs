@@ -1,7 +1,7 @@
 ﻿namespace ADP2.Core
 
 /// Kind of a document related to a work.
-/// For second course and third course works there is text, slides and advisor review, optionally a consultant review. 
+/// For second course and third course works there is text, slides and advisor review, optionally a consultant review.
 /// Advisor and consultant review can be submitted as a single document.
 /// Qualification works also have separate reviewer reviews.
 type DocumentKind =
@@ -15,29 +15,28 @@ type DocumentKind =
 /// Document related to qualification work, stored as a file with special name format:
 /// <transliterated surname of a student>-<document kind>.<extension>
 /// For example, "Ololoev-report.pdf"
-/// One document can have several authors, for example, slides for team project can be named 
+/// One document can have several authors, for example, slides for team project can be named
 /// as "Ivanov-Petrov-slides.pdf".
-/// If there are several students with the same surname, name is added to a surname in the file name, 
+/// If there are several students with the same surname, name is added to a surname in the file name,
 /// for example, "Ivanov.Ivan-slides.pdf"
-type Document = { 
-    FileName: string
-    FileNameWithRelativePath: string
-    Authors: string list
-    Kind: DocumentKind 
-}
+type Document =
+    { FileName: string
+      FileNameWithRelativePath: string
+      Authors: string list
+      Kind: DocumentKind }
 
 /// <summary>
-/// All collected information about one work. Includes list of related documents and some metainformation 
+/// All collected information about one work. Includes list of related documents and some metainformation
 /// to be used by generator.
 /// </summary>
 /// <param name="shortName">
 ///     Transliterated student surname or surname and name, used as an Id of a work throughout the system.
 /// </param>
 type Work(shortName: string) =
-    
+
     /// Transliterated student surname or surname and name, used as an Id of a work throughout the system.
     member val ShortName = shortName with get, set
-    
+
     /// Title of the work.
     member val Title = "" with get, set
 
@@ -75,44 +74,55 @@ type Work(shortName: string) =
     member val DoNotPublish = false with get, set
 
     /// Adds a new document to the work entry.
-    member this.Add (document: Document) =
+    member this.Add(document: Document) =
         match document.Kind with
         | Text -> this.Text <- Some document
         | Slides -> this.Slides <- Some document
         | AdvisorReview -> this.AdvisorReview <- Some document
         | ConsultantReview -> this.ConsultantReview <- Some document
-        | AdvisorConsultantReview -> 
+        | AdvisorConsultantReview ->
             this.AdvisorReview <- Some document
             this.ConsultantReview <- Some document
         | ReviewerReview -> this.ReviewerReview <- Some document
 
     /// Merges metainformation from other work to this one.
-    member this.Merge (other: Work) =
+    member this.Merge(other: Work) =
         assert (other.ShortName = this.ShortName)
-        if other.Title <> "" && this.Title = "" then 
+
+        if other.Title <> "" && this.Title = "" then
             this.Title <- other.Title
+
         if other.AuthorName <> "" && this.AuthorName = "" then
             this.AuthorName <- other.AuthorName
+
         if other.AdvisorSurname <> "" && this.AdvisorSurname = "" then
             this.AdvisorSurname <- other.AdvisorSurname
+
         if other.AdvisorName <> "" && this.AdvisorName = "" then
             this.AdvisorName <- other.AdvisorName
+
         if other.SourceUri <> "" && this.SourceUri = "" then
             this.SourceUri <- other.SourceUri
+
         if other.CommitterName <> "" && this.CommitterName = "" then
             this.CommitterName <- other.CommitterName
+
         if other.ConsultantReview.IsSome && this.ConsultantReview.IsNone then
             this.ConsultantReview <- other.ConsultantReview
+
         if other.AdvisorReview.IsSome && this.AdvisorReview.IsNone then
             this.AdvisorReview <- other.AdvisorReview
+
         if other.ReviewerReview.IsSome && this.ReviewerReview.IsNone then
             this.ReviewerReview <- other.ReviewerReview
+
         if other.Slides.IsSome && this.Slides.IsNone then
             this.Slides <- other.Slides
+
         if other.Text.IsSome && this.Text.IsNone then
             this.Text <- other.Text
+
         if other.DoNotPublish then
             this.DoNotPublish <- true
 
-    override this.ToString() =
-        $"{this.ShortName}"
+    override this.ToString() = $"{this.ShortName}"

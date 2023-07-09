@@ -4,50 +4,51 @@
 module MetadataSourceUtils =
 
     /// Common configuration of metadata, shared by Google and Yandex metadata sources.
-    type DataConfig = 
-        { 
-            SheetName: string
-    
-            AuthorNameColumn: string
-            AdvisorColumn: string
-            TitleColumn: string
-            SourceUriColumn: string
-            CommitterNameColumn: string
-            ResultColumn: string
-            DoNotPublishColumn: string
-        }
+    type DataConfig =
+        { SheetName: string
+
+          AuthorNameColumn: string
+          AdvisorColumn: string
+          TitleColumn: string
+          SourceUriColumn: string
+          CommitterNameColumn: string
+          ResultColumn: string
+          DoNotPublishColumn: string }
 
     /// Marks in a "Зачёт" column that meant that a work was successfully defended.
     let allowedResults = Set.ofList [ "A"; "B"; "C"; "D"; "E"; "да" ]
 
     /// Gets surname from full name in "Surname Name MiddleName" format.
-    let getSurname (name: string) =
-        name.Split([|' '|]) |> Seq.head
+    let getSurname (name: string) = name.Split([| ' ' |]) |> Seq.head
 
     /// Returns advisor name and surname from full name in "Surname Name MiddleName" format or
     /// "Dr. I.I. Surname" format.
     let parseAdvisor (raw: string) =
         let surname =
             if raw.Contains('.') then
-                raw.Split([|' '; '.'|]) |> Seq.last
+                raw.Split([| ' '; '.' |]) |> Seq.last
             else
                 getSurname raw
-        let name = 
+
+        let name =
             if raw.Contains('.') then
-                raw.[0..raw.Length - surname.Length - 1]
+                raw.[0 .. raw.Length - surname.Length - 1]
             else if raw.Contains(' ') |> not then
                 ""
             else
-                raw.Split([|' '|]) |> Seq.skip 1 |> Seq.head
+                raw.Split([| ' ' |]) |> Seq.skip 1 |> Seq.head
+
         (name, surname)
 
     /// Searches for non-unique surnames in a Work sequence and adds first name after dot for them.
     let addNamesIfNeeded (works: Work seq) =
         let surnameCounts = works |> Seq.countBy (fun w -> w.ShortName) |> Map.ofSeq
-        works 
-        |> Seq.map (fun w -> 
-            if surnameCounts.[w.ShortName] > 1 then 
-                w.ShortName <- w.ShortName + "." + (w.AuthorName.Split(' ').[1]) 
+
+        works
+        |> Seq.map (fun w ->
+            if surnameCounts.[w.ShortName] > 1 then
+                w.ShortName <- w.ShortName + "." + (w.AuthorName.Split(' ').[1])
+
             w)
 
     /// Constructs new Work record.

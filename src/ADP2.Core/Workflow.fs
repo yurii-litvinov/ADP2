@@ -7,7 +7,11 @@ module Workflow =
     /// with all data needed to upload works.
     let generateWorksInfo (appConfig: ApplicationConfig) =
         let metadataSource = MetadataSourceSelector.selectMetadataSource appConfig
-        let metadata = metadataSource.GetWorksMetadataAsync () |> Async.AwaitTask |> Async.RunSynchronously
+
+        let metadata =
+            metadataSource.GetWorksMetadataAsync()
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
 
         let knowledgeBase = Inventorizer.Inventorize(".")
         Processor.mergeWorks knowledgeBase metadata
