@@ -51,6 +51,40 @@ module MetadataSourceUtils =
 
             w)
 
+    /// Gets what optional column names are defined in config
+    let isDefinedOptionalColumns (config: DataConfig) =
+        let sourceUriDefined =
+            not (config.SourceUriColumn = "-" || config.SourceUriColumn = "")
+
+        let doNotPublishDefined =
+            not (config.DoNotPublishColumn = "-" || config.DoNotPublishColumn = "")
+
+        (sourceUriDefined, doNotPublishDefined)
+
+    /// Gets "interesting" column names from config, ignoring undefined optional columns
+    let getInterestingColumns (config: DataConfig) =
+        let columns =
+            [ config.AuthorNameColumn
+              config.AdvisorColumn
+              config.TitleColumn
+              config.ResultColumn ]
+
+        let sourceUriDefined, doNotPublishDefined = isDefinedOptionalColumns config
+
+        let columns =
+            if sourceUriDefined then
+                config.CommitterNameColumn :: config.SourceUriColumn :: columns
+            else
+                columns
+
+        let columns =
+            if doNotPublishDefined then
+                config.DoNotPublishColumn :: columns
+            else
+                columns
+
+        columns
+
     /// Constructs new Work record.
     let createWorkMetadata author advisor title (sourceUrl: string) committerName doNotPublish =
         let cleanup (str: string) =
@@ -59,9 +93,7 @@ module MetadataSourceUtils =
         let work = Work(author |> getSurname)
         let advisor = parseAdvisor advisor
         work.AdvisorName <- fst advisor
-
-        /// Kosarev is the special case, since he is the only one that registered on a site in english.
-        work.AdvisorSurname <- if snd advisor = "Косарев" then "Kosarev" else snd advisor
+        work.AdvisorSurname <- snd advisor
         work.AuthorName <- author
         work.Title <- cleanup title
         work.SourceUri <- if sourceUrl.StartsWith "http" then sourceUrl else ""

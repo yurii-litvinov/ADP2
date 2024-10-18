@@ -14,18 +14,9 @@ type GoogleSheetsConfig = { GoogleSheetId: string }
 type GoogleSheetsMetadataSource(appConfig: ApplicationConfig) =
 
     let readSheetAsync (config: DataConfig) (sheet: Sheet) =
-        let columns =
-            [ config.AuthorNameColumn
-              config.AdvisorColumn
-              config.TitleColumn
-              config.ResultColumn
-              config.DoNotPublishColumn ]
+        let columns = getInterestingColumns config
 
-        let columns =
-            if config.SourceUriColumn = "-" then
-                columns
-            else
-                config.CommitterNameColumn :: config.SourceUriColumn :: columns
+        let sourceUriDefined, doNotPublishDefined = isDefinedOptionalColumns config
 
         task {
             let! rows = sheet.ReadByHeadersAsync(columns)
@@ -34,24 +25,28 @@ type GoogleSheetsMetadataSource(appConfig: ApplicationConfig) =
                 rows
                 |> Seq.choose (fun row ->
                     if allowedResults.Contains row[config.ResultColumn] then
-                        if config.SourceUriColumn = "-" then
-                            Some
-                            <| createWorkMetadata
-                                row[config.AuthorNameColumn]
-                                row[config.AdvisorColumn]
-                                row[config.TitleColumn]
-                                ""
-                                ""
-                                row[config.DoNotPublishColumn]
-                        else
-                            Some
-                            <| createWorkMetadata
-                                row[config.AuthorNameColumn]
-                                row[config.AdvisorColumn]
-                                row[config.TitleColumn]
-                                row[config.SourceUriColumn]
+
+                        let sourceUri = if sourceUriDefined then row[config.SourceUriColumn] else ""
+
+                        let commiterName =
+                            if sourceUriDefined && sourceUri <> "" && sourceUri <> "—" then
                                 row[config.CommitterNameColumn]
+                            else
+                                ""
+
+                        let doNotPublish =
+                            if doNotPublishDefined then
                                 row[config.DoNotPublishColumn]
+                            else
+                                ""
+
+                        Some (createWorkMetadata
+                                row[config.AuthorNameColumn]
+                                row[config.AdvisorColumn]
+                                row[config.TitleColumn]
+                                sourceUri
+                                commiterName
+                                doNotPublish)
                     else
                         None)
         }

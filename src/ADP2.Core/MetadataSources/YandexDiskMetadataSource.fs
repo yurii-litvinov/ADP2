@@ -17,29 +17,9 @@ type YandexSheetConfig =
 type YandexDiskMetadataSource(appConfig: ApplicationConfig) =
 
     let readSheet (config: DataConfig) (sheet: DocUtils.Xlsx.Sheet) =
-        let columns =
-            [ config.AuthorNameColumn
-              config.AdvisorColumn
-              config.TitleColumn
-              config.ResultColumn ]
+        let columns = getInterestingColumns config
 
-        let sourceUriDefined =
-            not (config.SourceUriColumn = "-" || config.SourceUriColumn = "")
-
-        let doNotPublishDefined =
-            not (config.DoNotPublishColumn = "-" || config.DoNotPublishColumn = "")
-
-        let columns =
-            if sourceUriDefined then
-                config.CommitterNameColumn :: config.SourceUriColumn :: columns
-            else
-                columns
-
-        let columns =
-            if doNotPublishDefined then
-                config.DoNotPublishColumn :: columns
-            else
-                columns
+        let sourceUriDefined, doNotPublishDefined = isDefinedOptionalColumns config
 
         let createMetadata (row: Map<string, string>) =
             let sourceUri = if sourceUriDefined then row[config.SourceUriColumn] else ""

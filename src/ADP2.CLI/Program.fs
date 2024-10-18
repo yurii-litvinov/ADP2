@@ -26,7 +26,7 @@ let main _ =
             printfn "Works with no files:"
 
             knowledgeBase.WorksWithNoFiles
-            |> Seq.iter (fun w -> printfn "%s: %s" w.ShortName w.Title)
+            |> Seq.iter (fun w -> printfn "%s: (transliterated as '%s') %s" w.ShortName (DataModelUtils.transliterate w.ShortName) w.Title)
 
             printfn ""
             printfn "Works with no metainformation:"
