@@ -73,7 +73,10 @@ module MetadataSourceUtils =
 
         let columns =
             if sourceUriDefined then
-                config.CommitterNameColumn :: config.SourceUriColumn :: columns
+                if config.CommitterNameColumn = "" then
+                    config.SourceUriColumn :: columns
+                else
+                    config.CommitterNameColumn :: config.SourceUriColumn :: columns
             else
                 columns
 

@@ -24,7 +24,7 @@ module DocumentNameParser =
     /// <Actual russian surname of a student><.optional name>-<semester>-<document kind>.<extension>
     /// For example, "Ололоев.Йцукен-4-семест-отчёт.pdf"
     let private newGeneralPattern =
-        @"((?<ShortName>[а-яё.]+)-)+(\d-семестр)-(?<Kind>(презентация)|(отчёт)|(отзыв-консультанта)|(отзыв))"
+        @"((?<ShortName>[а-яё.]+)-)+(\d-семестр)-(?<Kind>(презентация)|(отчёт)|(отчет)|(отзыв-консультанта)|(отзыв))"
 
     /// Pattern for matching advisor and consultant reviews in one file. Separate from general pattern to avoid
     /// regex greediness issues.
@@ -51,6 +51,7 @@ module DocumentNameParser =
     let private toDocumentKind =
         function
         | "report"
+        | "отчет"
         | "отчёт" -> Text
         | "slides"
         | "presentation"

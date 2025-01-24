@@ -24,8 +24,8 @@ type YandexDiskMetadataSource(appConfig: ApplicationConfig) =
         let createMetadata (row: Map<string, string>) =
             let sourceUri = if sourceUriDefined then row[config.SourceUriColumn] else ""
 
-            let commiterName =
-                if sourceUriDefined && sourceUri <> "" && sourceUri <> "—" then
+            let committerName =
+                if sourceUriDefined && sourceUri <> "" && sourceUri <> "—" && config.CommitterNameColumn <> "" then
                     row[config.CommitterNameColumn]
                 else
                     ""
@@ -41,7 +41,7 @@ type YandexDiskMetadataSource(appConfig: ApplicationConfig) =
                 row[config.AdvisorColumn]
                 row[config.TitleColumn]
                 sourceUri
-                commiterName
+                committerName
                 doNotPublish
 
         let rows = sheet.ReadByHeaders(columns)
@@ -52,6 +52,7 @@ type YandexDiskMetadataSource(appConfig: ApplicationConfig) =
                 Some <| createMetadata row
             else
                 None)
+        |> Seq.toList
 
     interface IMetadataSource with
 
