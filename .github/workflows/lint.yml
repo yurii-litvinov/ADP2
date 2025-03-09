@@ -11,6 +11,6 @@ jobs:
           submodules: recursive
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '9.x'
       - run: dotnet tool install fantomas
       - run: dotnet fantomas --check . 
