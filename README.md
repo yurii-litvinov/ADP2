@@ -11,7 +11,7 @@ https://github.com/yurii-litvinov/adp. It supports bachelor qualification works,
 
 * Clone it with submodules `git clone --recurse-submodules https://github.com/yurii-litvinov/ADP2.git` 
   * or init submodules after clone: `git submodule update --init`
-* Build this project using .NET (>= 7.0) using `dotnet publish -c Release`.
+* Build this project using .NET (>= 9.0) using `dotnet publish -c Release`.
 * Add resulting `publish` folder to your `PATH` variable, for example, `set PATH=C:\Users\yurii\source\repos\ADP2\release;%PATH%`.
 * Collect your qualification work files in one folder, make sure that they are named as 
   `<student name>-<report|slides|review|advisor-review|reviewer-review>.pdf`
